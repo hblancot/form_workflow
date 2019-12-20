@@ -1,0 +1,9 @@
+steps:
+# Setup
+- name: gcr.io/$PROJECT_ID/flutter_web:1.12
+  entrypoint: flutter
+  args: ['config', '--enable-web']
+# Build
+- name: gcr.io/$PROJECT_ID/flutter_web:1.12
+  entrypoint: flutter
+  args: ['build', 'web']
