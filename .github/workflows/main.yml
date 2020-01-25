@@ -25,8 +25,6 @@ jobs:
         with:
           flutter-version: '1.12.13+hotfix.5'
       - run: flutter pub get
-      - name: lint
-        run: dartanalyzer lib test
       - run: flutter test
       - name: ios-build
         if: matrix.platform == 'macos-latest'
