@@ -11,8 +11,7 @@ on:
 
 jobs:
   
-  # Install flutter and project deps (all platforms)
-  setup:
+  build:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest]
@@ -26,31 +25,12 @@ jobs:
         with:
           flutter-version: '1.12.13+hotfix.5'
       - run: flutter pub get
-  
-  # Lint (Android only)
-  lint:
-    needs: setup
-    runs-on: [ubuntu-latest]
-    steps:
-      - run: dartanalyzer lib test
-  
-  # Unit test (Android only)
-  test:
-    needs: setup
-    runs-on: [ubuntu-latest]
-    steps:
+      - name: lint
+        run: dartanalyzer lib test
       - run: flutter test
-
-  # Build (iOS only)
-  ios-build:
-    needs: setup
-    runs-on: [macos-latest]
-    steps:
-      - run: flutter build ios --release --no-codesign
-
-  # Build (Android only)
-  android-build:
-    needs: [lint, test]
-    runs-on: [ubuntu-latest]
-    steps:
-      - run: flutter build apk --release --split-per-abi
+      - name: ios-build
+        if: matrix.platform == 'macos-latest'
+        run: flutter build ios --release --no-codesign
+      - name: android-build
+        if: matrix.platform == 'ubuntu-latest'
+        run: flutter build apk --release --split-per-abi
